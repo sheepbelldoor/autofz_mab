@@ -70,7 +70,7 @@ RUN apt install -y ninja-build wget cmake
 
 RUN echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main" >> /etc/apt/sources.list && \
   echo "deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main" >> /etc/apt/sources.list && \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 15CF4D18AF4F7421 && \
+  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 15CF4D18AF4F7421 && \
   apt update && \
     apt-get install -y clang-12 llvm-12-dev lld-12 lld-12 clangd-12 lldb-12 libc++1-12 libc++-12-dev libc++abi-12-dev && \
   update-alternatives --install /usr/bin/clang clang /usr/bin/clang-12 100 && \

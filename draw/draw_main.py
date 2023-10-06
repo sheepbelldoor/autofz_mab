@@ -74,10 +74,10 @@ PERIOD = 3600
 
 TICK = 60
 
-normal12 = [(235, 172, 35), (184, 0, 88), (0, 140, 249), (0, 110, 0),
+normal12 = [(189, 189, 189), (0, 167, 108), (0, 140, 249), (0, 110, 0),
             (0, 187, 173), (209, 99, 230), (178, 69, 2), (255, 146, 135),
-            (89, 84, 214), (0, 198, 248), (135, 133, 0), (0, 167, 108),
-            (189, 189, 189)]
+            (89, 84, 214), (0, 198, 248), (135, 133, 0), (0, 84, 255),
+            (204, 61, 61), (95, 0, 255)]
 
 MARKER_LIST = [
     ',', '.', 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd',
@@ -99,6 +99,7 @@ AUTOFZ_NAMES = [
 ]
 
 INDIVIDUAL_FUZZER = [
+    'focus_autofz_mab',
     'focus_afl',
     'focus_aflfast',
     'focus_mopt',
@@ -113,6 +114,7 @@ INDIVIDUAL_FUZZER = [
 ]
 
 INDIVIDUAL_FUZZER_NAME = [
+    'autofz_mab',
     'AFL',
     'AFLFast',
     'MOpt',
@@ -223,6 +225,7 @@ def pick_algo_figure7():
 
 NAME_MAP = ChainMap(
     NAME_MAP, {
+        'focus_autofz_mab': 'autofz_mab',
         'focus_afl': 'AFL',
         'focus_aflfast': 'AFLFast',
         'focus_mopt': 'MOpt',
@@ -296,7 +299,7 @@ def draw_overview():
             col_wrap=4,  # NOTE: change based on the total number
             # col_wrap=3,
             height=1.5,
-            aspect=2,
+            aspect=8,
             # hue_order=algo_order,
             palette=PALETTE)
 
@@ -306,7 +309,7 @@ def draw_overview():
             x='time',
             size='autofz',
             sizes={
-                "True": 3,
+                "True": 1.2,
                 "False": 1.2
             },
             # legend='auto',
@@ -320,6 +323,7 @@ def draw_overview():
 
         #label and legends
         g.set_titles(col_template='{col_name}')
+        g.tick_params(labelsize=5)
 
         ylabel = None
         if METRIC == 'bitmap':
@@ -332,7 +336,7 @@ def draw_overview():
 
         legend_handles = []
         for algo in algo_order:
-            lw = 3 if algo in AUTOFZ_NAMES else 1.2
+            lw = 1.2 if algo in AUTOFZ_NAMES else 1.2
             l = Line2D([0], [0], color=PALETTE[algo], label=algo, lw=lw)
             legend_handles.append(l)
 
@@ -345,8 +349,8 @@ def draw_overview():
 
         timeout_seconds = utils.parse_delta(ARGS.timeout).total_seconds()
         print(timeout_seconds)
-        ticks = np.arange(0, (timeout_seconds + 1) / 60, 60 * 6)
-        ticklabels = [f'{int(tick/60)}' for tick in ticks]
+        ticks = np.arange(0, (timeout_seconds + 1) / 60, 30)
+        ticklabels = [f'{(tick/60):.1f}' for tick in ticks]
         print(ticklabels)
         g.set(xticks=ticks)
         g.set_xticklabels(ticklabels)
