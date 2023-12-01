@@ -39,18 +39,19 @@ TARGET = [
     'openthread-2018-02-27-ip6',
     'openthread-2018-02-27-radio',
     'wav2swf',
-    # 'openthread-2018-02-27-radio',
     'woff2',
+    'jq',
+    'proj4-2017-08-14',
     'wpantund',
     # 'boringssl-2016-02-12',
     'c-ares',
     'guetzli',
-    # 'json-2017-02-12',
+    'json-2017-02-12',
     'lcms',
     'libpng',
     're2',
     'sqlite',
-    # 'vorbis-2017-12-11'
+    'vorbis-2017-12-11'
 ]
 
 # Get docker container name in command "docker ps"
