@@ -6,7 +6,8 @@ from os import path
 HOME = "/home/autofz"
 OUT = "output"
 PATH = os.getcwd()
-MAB = "mab" # if directory name is not mab, it must change.
+MAB = "mab" # if log file name is not mab, it must change.
+MABPATH = path.join(PATH, MAB)
 TARGET = [
     'exiv2',
     'ffmpeg',
@@ -49,7 +50,7 @@ def getContainerName():
     return nlist
 
 # Get output directory name in docker container with name entered as a parameter
-def getLogPath(containerName):
+def getLogPath(containerName, isMAB):
 
     """ Get home directory's files """
     """ return string list """
@@ -68,12 +69,19 @@ def getLogPath(containerName):
     """ return string list """
     def getOutputDirectoryNames(homeDirectory):
         outputDirectoryNames = []
-        for files in homeDirectory:
-            if files.find(OUT) != -1:
-                outputDirectoryNames.append(files)
-            else:
-                print("A file \'" + files + "\' is not output directory.")
+        if isMAB == False:
+            for files in homeDirectory:
+                if files.find(OUT) != -1:
+                    outputDirectoryNames.append(files)
+                else:
+                    print("A file \'" + files + "\' is not output directory.")
                 continue
+        else:
+            for files in homeDirectory:
+                if files.find(MAB) != -1:
+                    outputDirectoryNames.append(files)
+                else:
+                    print("A file \'" + files + "\' is not mab directory")
 
         return outputDirectoryNames
 
@@ -119,18 +127,18 @@ def modifyFocusOneMAB(file):
     with open(file) as f:
         lines = f.readlines()
         for line in lines:
-            line = line.replace('\"focus_one\": \"null\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"afl\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"aflfast\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"mopt\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"angora\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"qsym\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"fairfuzz\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"lafintel\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"learnafl\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"libfuzzer\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"radamsa\"', '\"focus_one\": \"autofz_mab\"')
-            line = line.replace('\"focus_one\": \"redqueen\"', '\"focus_one\": \"autofz_mab\"')
+            line = line.replace('\"focus_one\": null', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": afl', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": aflfast', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": mopt', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": angora', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": qsym', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": fairfuzz', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": lafintel', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": learnafl', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": libfuzze', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": radamsa', '\"focus_one\": autofz_mab')
+            line = line.replace('\"focus_one\": redqueen', '\"focus_one\": autofz_mab')
             temp_line.append(line)
     # Rewrite
     with open(file, 'w') as f:
@@ -141,11 +149,13 @@ def modifyFocusOneMAB(file):
 def main():
     # Get container name
     containerList = getContainerName()
-
+    
+    os.system("mkdir autofz")
+    print("========== Get autofz Logs ==========")
+    # Get autofz logs
     for containerName in containerList:
-        print()
-        print("In" + containerName)
-        logPaths = getLogPath(containerName)
+        print("In " + containerName)
+        logPaths = getLogPath(containerName, False)
         for logPath in logPaths:
             # If there is no log file -> continue
             if logPath.find(".json") == -1:
@@ -156,20 +166,49 @@ def main():
             for target in TARGET:
                 if logPath.find(target) != -1:
                     if not path.exists(target):
-                        os.system("mkdir " + target)
-                    targetDirectory = path.join(PATH, target)
+                        inDirectory = path.join(PATH, "autofz")
+                        os.makedirs(inDirectory + "/" + target, exist_ok=True)
+                    targetDirectory = path.join(PATH, "autofz/" + target)
             
-            if logPath.find(MAB) != -1:
-                if not path.exists(MAB):
-                    os.system("mkdir mab")
-                    targetDirectory = path.join(PATH, MAB)
             subprocess.call("docker cp " + containerName + ":" + logPath + " " + targetDirectory, shell=True)
     
+    
+    print("\n========== Get autofz_mab Logs ==========")
+    # Get autofz_mab logs
+    os.system("mkdir " + MAB)
+    for containerName in containerList:
+        print("In " + containerName)
+
+        # Get logPaths which have prefix MAB
+        logPaths = getLogPath(containerName, True)
+
+        for logPath in logPaths:
+            # If there is no log file -> continue
+            if logPath.find(".json") == -1:
+                continue
+
+            # Set a target directory as a target program
+            targetDirectory = PATH
+            for target in TARGET:
+                if logPath.find(target) != -1:
+                    if not path.exists(target):
+                        inDirectory = path.join(PATH, MAB)
+                        os.makedirs(inDirectory + "/" + target, exist_ok=True)
+                    targetDirectory = path.join(PATH, MAB + "/" + target)
+            
+            # Copy a log file
+            subprocess.call("docker cp " + containerName + ":" + logPath + " " + targetDirectory, shell=True)
+    
+
     # If there are autofz_mab logs, it change focus_one for autofz-draw
     if path.exists(MAB):
-        for (root, directories, files) in os.walk(MAB):
-            for file in files:
-                modifyFocusOneMAB(path.join(root, file))
+        # Get a list of MAB directory
+        dirList = os.listdir(MAB)
+        for directory in dirList:
+            mabLogList = os.listdir(MAB + "/" + directory)
+            for log in mabLogList:
+                print(MAB + "/" + directory + "/" + log)
+                modifyFocusOneMAB("./" + MAB + "/" + directory + "/" + log)
 
 if __name__ == "__main__":
     main()
