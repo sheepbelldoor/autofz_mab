@@ -27,7 +27,7 @@ if [ -e $SCRIPT_DIR/Dockerfile ]; then
             --build-arg USER=$USER \
             --build-arg UID=$_UID \
             --build-arg GID=$GID \
-            -t autofz_plot \
+            -t autofz_debug \
             -f $SCRIPT_DIR/Dockerfile \
             "${build_args[@]}" \
             .

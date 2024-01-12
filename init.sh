@@ -13,3 +13,16 @@ CID=$(basename ${CPU_CGROUP_PATH})
 set -x
 # create subgroup
 cgcreate -t autofz -a autofz -g cpu:/autofz
+
+# gdb and pwndbg for debug
+apt-get install -y gdb
+cd ~
+wget https://github.com/pwndbg/pwndbg/releases/download/2023.07.17-pkgs/pwndbg_2023.07.17_amd64.tar.gz
+tar -v -xf ./pwndbg_2023.07.17_amd64.tar.gz
+cp -r /d/p/aflasan .
+rm -rf pwndbg_2023.07.17_amd64.tar.gz
+
+# zsh
+apt-get install -y zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+

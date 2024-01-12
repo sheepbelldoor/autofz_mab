@@ -141,6 +141,13 @@ UNIFUZZ = [
     'pdftotext',
     'tcpdump',
     'tiffsplit',
+    'jhead',
+    'mp3gain',
+    'wav2swf',
+    'flvmeta',
+    'cflow',
+    'jq',
+    'sqlite3',
 ]
 
 FTS = [
@@ -149,18 +156,29 @@ FTS = [
     'libarchive-2017-01-04',
     'libjpeg-turbo-07-2017',
     'boringssl-2016-02-12',
-    # 'openthread-2018-02-27-radio',
+    'openthread-2018-02-27-radio',
     'woff2-2016-05-06',
     'wpantund-2018-02-27',
-    # 'boringssl-2016-02-12',
+    'boringssl-2016-02-12',
     'c-ares-CVE-2016-5180',
     'guetzli-2017-3-30',
-    # 'json-2017-02-12',
+    'json-2017-02-12',
     'lcms-2017-03-21',
     'libpng-1.2.56',
     're2-2014-12-09',
     'sqlite-2016-11-14',
-    # 'vorbis-2017-12-11'
+    'vorbis-2017-12-11',
+    'guetzli-2017-3-30',
+    'libssh-2017-1272',
+    'libxml2-v2.9.2',
+    'llvm-libcxxabi-2017-01-27',
+    'openssl-1.0.1f',
+    'openssl-1.0.2d',
+    'openssl-1.1.0c-bignum',
+    'openssl-1.1.0c-x509',
+    'openthread-2018-02-27-ip6',
+    'pcre2-10.00',
+    'proj4-2017-08-14',
 ]
 
 COMMON_TARGET = [
