@@ -21,6 +21,7 @@ wget https://github.com/pwndbg/pwndbg/releases/download/2023.07.17-pkgs/pwndbg_2
 tar -v -xf ./pwndbg_2023.07.17_amd64.tar.gz
 cp -r /d/p/aflasan .
 rm -rf pwndbg_2023.07.17_amd64.tar.gz
+mkdir crashes
 
 # zsh
 apt-get install -y zsh
