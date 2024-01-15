@@ -27,3 +27,5 @@ mkdir crashes
 apt-get install -y zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
+# git
+git clone https://github.com/sheepbelldoor/deduplicateCrashes.git
